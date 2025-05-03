@@ -24,12 +24,12 @@ Node.js, Express, MongoDB, Mongoose
 
 ## 2. **[Your Next Project Name]**
 **Description:**  
-[Provide a brief description of your next project.]
+[Provide a brief description of your next PENDING
 
 **Features:**
-- [Feature 1]
-- [Feature 2]
-- [Feature 3]
+- [PENDING]
+- [PENDING]
+- [PENDING]
 
 **Tech Stack:**  
 [Technologies used]
@@ -41,12 +41,12 @@ Node.js, Express, MongoDB, Mongoose
 
 ## 3. **[Your Next Project Name]**
 **Description:**  
-[Provide a brief description of your next project.]
+[Provide a brief description of your next PENDING
 
 **Features:**
-- [Feature 1]
-- [Feature 2]
-- [Feature 3]
+- [PENDING]
+- [PENDING]
+- [PENDING]
 
 **Tech Stack:**  
 [Technologies used]
@@ -62,6 +62,4 @@ I am a passionate developer who enjoys building unique and scalable solutions. A
 Feel free to explore my work and reach out if you have any questions or collaboration ideas!
 
 **Contact:**  
-[Your Email Address]  
-[Your LinkedIn Profile]  
-[Your GitHub Profile]
+rishabh.bhatt956@gmail.com  
