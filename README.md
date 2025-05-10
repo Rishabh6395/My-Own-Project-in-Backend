@@ -22,20 +22,16 @@ Node.js, Express, MongoDB, Mongoose
 
 ---
 
-## 2. **[Your Next Project Name]**
-**Description:**  
-[Provide a brief description of your next PENDING
+## 2. **Blogging Platform API**
+**Basic blogging platform:**  
+[Basic blogging platform] - A simple blogging platform where users can create, read, update, and delete blog posts. The API is built using Node.js and Express, with MongoDB for data storage.
 
 **Features:**
-- [PENDING]
-- [PENDING]
-- [PENDING]
+- [PENDING] - Basic blogging platform where users can create, read, update, and delete blog posts.
+- [PENDING] - User authentication and authorization using JWT.
+- [PENDING] - Pagination and filtering for blog posts.
 
-**Tech Stack:**  
-[Technologies used]
 
-**Repository:**  
-[Link to the repository]
 
 ---
 
