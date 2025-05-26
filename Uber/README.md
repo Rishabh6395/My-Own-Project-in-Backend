@@ -1,19 +1,21 @@
-# User Registration API Documentation
+# User Registration & Login API Documentation
 
-## Endpoint
+## User Registration
+
+### Endpoint
 
 `POST /users/register`
 
 ---
 
-## Description
+### Description
 
 Registers a new user in the system.  
 Validates the input, hashes the password, and returns the created user along with an authentication token.
 
 ---
 
-## Request Body
+### Request Body
 
 Send a JSON object with the following structure:
 
@@ -28,7 +30,7 @@ Send a JSON object with the following structure:
 }
 ```
 
-### Example
+#### Example
 
 ```json
 {
@@ -43,9 +45,9 @@ Send a JSON object with the following structure:
 
 ---
 
-## Responses
+### Responses
 
-### Success
+#### Success
 
 - **Status Code:** `201 Created`
 - **Body:**
@@ -79,7 +81,7 @@ Send a JSON object with the following structure:
 }
 ```
 
-### Validation Error
+#### Validation Error
 
 - **Status Code:** `400 Bad Request`
 - **Body:**
@@ -109,7 +111,7 @@ Send a JSON object with the following structure:
 }
 ```
 
-### Missing Fields/Error
+#### Missing Fields/Error
 
 - **Status Code:** `400 Bad Request`
 - **Body:**
@@ -137,12 +139,137 @@ Send a JSON object with the following structure:
 
 ---
 
-## Notes
+## User Login
+
+### Endpoint
+
+`POST /users/login`
+
+---
+
+### Description
+
+Authenticates a user with email and password.  
+Returns the user data and a JWT token if credentials are valid.
+
+---
+
+### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "string (valid email, required)",
+  "password": "string (min 6 chars, required)"
+}
+```
+
+#### Example
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+---
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+    ```json
+    {
+      "user": {
+        "_id": "6651e8c2f1a2b3c4d5e6f789",
+        "fullname": {
+          "firstname": "John",
+          "lastname": "Doe"
+        },
+        "email": "john.doe@example.com"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+    ```
+
+#### Example Success Response
+
+```json
+{
+  "user": {
+    "_id": "6651e8c2f1a2b3c4d5e6f789",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+#### Validation Error
+
+- **Status Code:** `400 Bad Request`
+- **Body:**
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "Error message",
+          "param": "field",
+          "location": "body"
+        }
+      ]
+    }
+    ```
+
+#### Example Validation Error Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid email",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+#### Invalid Credentials
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+    ```json
+    {
+      "message": "Invalid email or password"
+    }
+    ```
+
+#### Example Invalid Credentials Response
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+---
+
+### Notes
 
 - `firstname` must be at least 3 characters.
 - `lastname` is optional but, if provided, must be at least 3 characters.
 - `email` must be a valid email address.
 - `password` must be at least 6 characters.
 - On success, a JWT token is returned for authentication.
+- Both `email` and `password` are required for login.
+- Use the returned token for authenticated requests to protected endpoints.
 
 ---
