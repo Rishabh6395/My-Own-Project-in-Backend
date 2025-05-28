@@ -262,6 +262,122 @@ Send a JSON object with the following structure:
 
 ---
 
+## Get User Profile
+
+### Endpoint
+
+`GET /users/profile`
+
+---
+
+### Description
+
+Returns the authenticated user's profile information.  
+Requires a valid JWT token in the request (usually via cookie or Authorization header).
+
+---
+
+### Authentication
+
+- **Required:** Yes (JWT token)
+
+---
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+    ```json
+    {
+      "_id": "6651e8c2f1a2b3c4d5e6f789",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+      // ...other user fields
+    }
+    ```
+
+#### Example Success Response
+
+```json
+{
+  "_id": "6651e8c2f1a2b3c4d5e6f789",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+---
+
+### Unauthorized Response
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+    ```json
+    {
+      "message": "Authentication required"
+    }
+    ```
+
+---
+
+## User Logout
+
+### Endpoint
+
+`GET /users/logout`
+
+---
+
+### Description
+
+Logs out the authenticated user by clearing the authentication token cookie and blacklisting the token.
+
+---
+
+### Authentication
+
+- **Required:** Yes (JWT token)
+
+---
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+    ```json
+    {
+      "message": "Logout successful"
+    }
+    ```
+
+#### Example Success Response
+
+```json
+{
+  "message": "Logout successful"
+}
+```
+
+---
+
+### Unauthorized Response
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+    ```json
+    {
+      "message": "Authentication required"
+    }
+    ```
+
+---
+
 ### Notes
 
 - `firstname` must be at least 3 characters.
