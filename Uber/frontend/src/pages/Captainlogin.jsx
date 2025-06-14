@@ -5,11 +5,11 @@ const Captainlogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [userData, setUserData] = useState({});
+  const [captainData, setCaptainData] = useState({});
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setUserData({
+    setCaptainData({
       email: email,
       password: password,
     });
@@ -21,7 +21,7 @@ const Captainlogin = () => {
       <div>
         <img
           className="w-16 mb-10"
-          src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
+          src="https://www.svgrepo.com/show/505031/uber-driver.svg"
           alt=""
         />
         <form
@@ -58,9 +58,9 @@ const Captainlogin = () => {
           </button>
 
           <p className="text-center">
-            New here?{" "}
-            <Link to="/signup" className="text-blue-600">
-              Create new Account
+            Join a fleet?
+            <Link to="/captain-signup" className="text-blue-600">
+              Register as a Captain
             </Link>
           </p>
         </form>
