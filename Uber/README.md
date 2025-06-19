@@ -1,4 +1,4 @@
-# User Registration & Login API Documentation
+# Uber Backend API Documentation
 
 ## User Registration
 
@@ -16,8 +16,6 @@ Validates the input, hashes the password, and returns the created user along wit
 ---
 
 ### Request Body
-
-Send a JSON object with the following structure:
 
 ```json
 {
@@ -65,22 +63,6 @@ Send a JSON object with the following structure:
     }
     ```
 
-#### Example Success Response
-
-```json
-{
-  "user": {
-    "_id": "6651e8c2f1a2b3c4d5e6f789",
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-
 #### Validation Error
 
 - **Status Code:** `400 Bad Request`
@@ -89,27 +71,13 @@ Send a JSON object with the following structure:
     {
       "errors": [
         {
-          "msg": "Error message",
-          "param": "field",
+          "msg": "Invalid email",
+          "param": "email",
           "location": "body"
         }
       ]
     }
     ```
-
-#### Example Validation Error Response
-
-```json
-{
-  "errors": [
-    {
-      "msg": "Invalid email",
-      "param": "email",
-      "location": "body"
-    }
-  ]
-}
-```
 
 #### Missing Fields/Error
 
@@ -124,18 +92,6 @@ Send a JSON object with the following structure:
       ]
     }
     ```
-
-#### Example Missing Fields Response
-
-```json
-{
-  "errors": [
-    {
-      "msg": "All fields are required"
-    }
-  ]
-}
-```
 
 ---
 
@@ -155,8 +111,6 @@ Returns the user data and a JWT token if credentials are valid.
 ---
 
 ### Request Body
-
-Send a JSON object with the following structure:
 
 ```json
 {
@@ -196,22 +150,6 @@ Send a JSON object with the following structure:
     }
     ```
 
-#### Example Success Response
-
-```json
-{
-  "user": {
-    "_id": "6651e8c2f1a2b3c4d5e6f789",
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-
 #### Validation Error
 
 - **Status Code:** `400 Bad Request`
@@ -220,27 +158,13 @@ Send a JSON object with the following structure:
     {
       "errors": [
         {
-          "msg": "Error message",
-          "param": "field",
+          "msg": "Invalid email",
+          "param": "email",
           "location": "body"
         }
       ]
     }
     ```
-
-#### Example Validation Error Response
-
-```json
-{
-  "errors": [
-    {
-      "msg": "Invalid email",
-      "param": "email",
-      "location": "body"
-    }
-  ]
-}
-```
 
 #### Invalid Credentials
 
@@ -252,17 +176,9 @@ Send a JSON object with the following structure:
     }
     ```
 
-#### Example Invalid Credentials Response
-
-```json
-{
-  "message": "Invalid email or password"
-}
-```
-
 ---
 
-## Get User Profile
+## User Profile
 
 ### Endpoint
 
@@ -273,13 +189,7 @@ Send a JSON object with the following structure:
 ### Description
 
 Returns the authenticated user's profile information.  
-Requires a valid JWT token in the request (usually via cookie or Authorization header).
-
----
-
-### Authentication
-
-- **Required:** Yes (JWT token)
+Requires a valid JWT token in the request (via cookie or Authorization header).
 
 ---
 
@@ -295,26 +205,10 @@ Requires a valid JWT token in the request (usually via cookie or Authorization h
         "lastname": "Doe"
       },
       "email": "john.doe@example.com"
-      // ...other user fields
     }
     ```
 
-#### Example Success Response
-
-```json
-{
-  "_id": "6651e8c2f1a2b3c4d5e6f789",
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com"
-}
-```
-
----
-
-### Unauthorized Response
+#### Unauthorized Response
 
 - **Status Code:** `401 Unauthorized`
 - **Body:**
@@ -340,12 +234,6 @@ Logs out the authenticated user by clearing the authentication token cookie and 
 
 ---
 
-### Authentication
-
-- **Required:** Yes (JWT token)
-
----
-
 ### Success Response
 
 - **Status Code:** `200 OK`
@@ -356,17 +244,7 @@ Logs out the authenticated user by clearing the authentication token cookie and 
     }
     ```
 
-#### Example Success Response
-
-```json
-{
-  "message": "Logout successful"
-}
-```
-
----
-
-### Unauthorized Response
+#### Unauthorized Response
 
 - **Status Code:** `401 Unauthorized`
 - **Body:**
@@ -378,7 +256,7 @@ Logs out the authenticated user by clearing the authentication token cookie and 
 
 ---
 
-## Captain Registration API Documentation
+# Captain Registration & Login API Documentation
 
 ## Captain Registration
 
@@ -397,8 +275,6 @@ Validates the input, hashes the password, and returns the created captain along 
 
 ### Request Body
 
-Send a JSON object with the following structure:
-
 ```json
 {
   "fullname": {
@@ -411,7 +287,7 @@ Send a JSON object with the following structure:
     "color": "string (min 3 chars, required)",
     "plate": "string (min 3 chars, required)",
     "capacity": "number (min 1, required)",
-    "vehicleType": "string (car | motorcycle | auto, required)"
+    "vehicleType": "string (car | auto | moto, required)"
   }
 }
 ```
@@ -463,28 +339,6 @@ Send a JSON object with the following structure:
     }
     ```
 
-#### Example Success Response
-
-```json
-{
-  "captain": {
-    "_id": "6651e8c2f1a2b3c4d5e6f999",
-    "fullname": {
-      "firstname": "Alex",
-      "lastname": "Smith"
-    },
-    "email": "alex.smith@captain.com",
-    "vehicle": {
-      "color": "Red",
-      "plate": "XYZ1234",
-      "capacity": 4,
-      "vehicleType": "car"
-    }
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
-
 #### Validation Error
 
 - **Status Code:** `400 Bad Request`
@@ -493,27 +347,13 @@ Send a JSON object with the following structure:
     {
       "errors": [
         {
-          "msg": "Error message",
-          "param": "field",
+          "msg": "Invalid email",
+          "param": "email",
           "location": "body"
         }
       ]
     }
     ```
-
-#### Example Validation Error Response
-
-```json
-{
-  "errors": [
-    {
-      "msg": "Invalid email",
-      "param": "email",
-      "location": "body"
-    }
-  ]
-}
-```
 
 #### Missing Fields/Error
 
@@ -529,25 +369,188 @@ Send a JSON object with the following structure:
     }
     ```
 
-#### Example Missing Fields Response
+---
+
+## Captain Login
+
+### Endpoint
+
+`POST /captains/login`
+
+---
+
+### Description
+
+Authenticates a captain with email and password.  
+Returns the captain data and a JWT token if credentials are valid.
+
+---
+
+### Request Body
 
 ```json
 {
-  "errors": [
-    {
-      "msg": "All fields are required"
-    }
-  ]
+  "email": "string (valid email, required)",
+  "password": "string (min 6 chars, required)"
+}
+```
+
+#### Example
+
+```json
+{
+  "email": "alex.smith@captain.com",
+  "password": "captainPass123"
 }
 ```
 
 ---
 
-### Notes
+### Responses
 
-- All vehicle fields are required and validated.
-- `vehicleType` must be one of: `car`, `motorcycle`, or `auto`.
-- On success, a JWT token is returned for authentication.
-- Use the returned token for authenticated requests to protected captain endpoints.
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+    ```json
+    {
+      "captain": {
+        "_id": "6651e8c2f1a2b3c4d5e6f999",
+        "fullname": {
+          "firstname": "Alex",
+          "lastname": "Smith"
+        },
+        "email": "alex.smith@captain.com",
+        "vehicle": {
+          "color": "Red",
+          "plate": "XYZ1234",
+          "capacity": 4,
+          "vehicleType": "car"
+        }
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    }
+    ```
+
+#### Validation Error
+
+- **Status Code:** `400 Bad Request`
+- **Body:**
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "Invalid email",
+          "param": "email",
+          "location": "body"
+        }
+      ]
+    }
+    ```
+
+#### Invalid Credentials
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+    ```json
+    {
+      "message": "Invalid email or password"
+    }
+    ```
+
+---
+
+## Captain Profile
+
+### Endpoint
+
+`GET /captains/profile`
+
+---
+
+### Description
+
+Returns the authenticated captain's profile information.  
+Requires a valid JWT token in the request (via cookie or Authorization header).
+
+---
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+    ```json
+    {
+      "captain": {
+        "_id": "6651e8c2f1a2b3c4d5e6f999",
+        "fullname": {
+          "firstname": "Alex",
+          "lastname": "Smith"
+        },
+        "email": "alex.smith@captain.com",
+        "vehicle": {
+          "color": "Red",
+          "plate": "XYZ1234",
+          "capacity": 4,
+          "vehicleType": "car"
+        }
+      }
+    }
+    ```
+
+#### Unauthorized Response
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+    ```json
+    {
+      "message": "Authentication required"
+    }
+    ```
+
+---
+
+## Captain Logout
+
+### Endpoint
+
+`GET /captains/logout`
+
+---
+
+### Description
+
+Logs out the authenticated captain by clearing the authentication token cookie and blacklisting the token.
+
+---
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+    ```json
+    {
+      "message": "Logout successful"
+    }
+    ```
+
+#### Unauthorized Response
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+    ```json
+    {
+      "message": "Authentication required"
+    }
+    ```
+
+---
+
+## Notes
+
+- All endpoints requiring authentication expect a JWT token in the `Authorization` header as `Bearer <token>`.
+- On successful login or registration, store the token in localStorage and use it for protected routes.
+- Vehicle types allowed: `car`, `auto`, `moto`.
+- All error responses are in JSON format.
 
 ---
