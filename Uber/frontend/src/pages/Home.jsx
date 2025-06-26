@@ -10,7 +10,9 @@ const Home = () => {
   const [destination, setDestination] = useState("")
   const [panelOpen, setPanelOpen] = useState(false)  
   const panelRef = useRef(null)
+  const vehiclePanelRef = useRef(null)
   const panelCloseRef = useRef(null)
+  const [vehiclePanel, setVehiclePanel] = useState(false)
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -41,11 +43,24 @@ const Home = () => {
     }
   }, [panelOpen])
 
+  useGSAP(function(){
+    if(vehiclePanel){
+      gsap.to(vehiclePanelRef.current, {
+      transform: 'translateY(0)',
+    })
+    }
+    else{
+      gsap.to(vehiclePanelRef.current, {
+      transform: 'translateY(100%)',
+    })
+    }
+  }, [vehiclePanel])
+
   return (
     <div className=' h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
 
-      <div className='h-screen w-screen object-cover'>
+      <div  className='h-screen w-screen object-cover'>
          {/* image for temp use */}
         <img src="https://preview.redd.it/uber-doesnt-show-me-estimated-prices-and-hasnt-for-months-v0-2601fzw9tlwb1.jpg?width=640&crop=smart&auto=webp&s=ea3ac677b73a805880377ddd59b9e2e5fea5454a" alt="" />
 
@@ -82,12 +97,13 @@ const Home = () => {
           </form>
           </div>
           <div ref={panelRef} className='h-0 opacity-0 bg-white'>
-            <LocationSearchPanel />
+            <LocationSearchPanel setPanelOpen={setPanelOpen}  setVehiclePanel={setVehiclePanel} />
           </div>
         </div>
       </div>
 
-      <div className='fixed w-full p-3 py-6 px-3 z-10 bottom-0 bg-white'>
+      <div  ref={vehiclePanelRef} className='fixed w-full translate-y-full p-3 py-10 px-3 z-10 bottom-0 bg-white'>
+        <h5 className='p-1 text-center  w-[94%] absolute top-0' onClick={() => setVehiclePanel(false)}><i className="text-3x l text-gray-400 ri-arrow-down-wide-line"></i></h5>
         <h3 className='text-2xl font-semibold mb-5'>Choose a Vehicle</h3>
         <div className='flex border-2 mb-2 active:border-black  rounded-xl p-3 w-full items-center justify-beween'>
           <img className='h-12' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1652995234/assets/92/8d4288-e896-4333-9bc2-c60c49f2a095/original/UberXL_Black_v2.png" alt="" />
