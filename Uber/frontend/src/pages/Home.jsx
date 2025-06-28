@@ -5,6 +5,7 @@ import 'remixicon/fonts/remixicon.css'
 import LocationSearchPanel from '../components/LocationSearchPanel'
 import VehiclePanel from '../components/vehiclePanel'
 import ConfirmRide from '../components/ConfirmRide'
+import LookingForDriver from '../components/LookingForDriver'
 
 const Home = () => {
 
@@ -14,9 +15,12 @@ const Home = () => {
   const panelRef = useRef(null)
   const vehiclePanelRef = useRef(null)
   const confirmRidePanelRef = useRef(null)
+  const vehicleFoundRef = useRef(null)
   const panelCloseRef = useRef(null)
   const [vehiclePanel, setVehiclePanel] = useState(false)
   const [confirmRidePannel, setConfirmRidePannel] = useState(false)  
+
+  const [vehicleFound, setVehicleFound] = useState(false)
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -50,11 +54,13 @@ const Home = () => {
   useGSAP(function(){
     if(vehiclePanel){
       gsap.to(vehiclePanelRef.current, {
+      // height: '0%',
       transform: 'translateY(0)',
     })
     }
     else{
       gsap.to(vehiclePanelRef.current, {
+      // height: '100%',
       transform: 'translateY(100%)',
     })
     }
@@ -72,6 +78,19 @@ const Home = () => {
     })
     }
   }, [confirmRidePannel])
+
+  useGSAP(function(){
+    if(vehicleFound){
+      gsap.to(vehicleFoundRef.current, {
+      transform: 'translateY(0)',
+    })
+    }
+    else{
+      gsap.to(vehicleFoundRef.current, {
+      transform: 'translateY(100%)',
+    })
+    }
+  }, [vehicleFound])
 
   return (
     <div className=' h-screen relative overflow-hidden'>
@@ -119,11 +138,15 @@ const Home = () => {
         </div>
       </div>
 
-      <div  ref={vehiclePanelRef} className='fixed w-full translate-y-full p-3 py-10 px-3 z-10 bottom-0 bg-white'>
+      <div  ref={vehiclePanelRef} className='fixed w-full translate-y-full p-3 py-10 pt-12 px-3 z-10 bottom-0 bg-white'>
         <VehiclePanel setConfirmRidePannel={setConfirmRidePannel} setVehiclePanel={setVehiclePanel}/>
       </div>
-      <div  ref={confirmRidePanelRef} className='fixed w-full translate-y-full p-3 py-10 px-3 z-10 bottom-0 bg-white'>
-        <ConfirmRide/>
+      <div  ref={confirmRidePanelRef} className='fixed w-full translate-y-full p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
+        <ConfirmRide setVehiclePanel={setVehiclePanel} setVehicleFound={setVehicleFound}
+        setConfirmRidePannel={setConfirmRidePannel}/>
+      </div>
+      <div ref={vehicleFoundRef}  className='fixed w-full translate-y-full p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
+        <LookingForDriver/>
       </div>
     </div>
   )
