@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useRef, useState } from 'react'
 import {useGSAP} from '@gsap/react'
 import { gsap } from 'gsap'
@@ -6,6 +7,7 @@ import LocationSearchPanel from '../components/LocationSearchPanel'
 import VehiclePanel from '../components/vehiclePanel'
 import ConfirmRide from '../components/ConfirmRide'
 import LookingForDriver from '../components/LookingForDriver'
+import WaitForDriver from '../components/WaitForDriver'
 
 const Home = () => {
 
@@ -16,11 +18,14 @@ const Home = () => {
   const vehiclePanelRef = useRef(null)
   const confirmRidePanelRef = useRef(null)
   const vehicleFoundRef = useRef(null)
+  const waitingForDriverRef = useRef(null)
   const panelCloseRef = useRef(null)
   const [vehiclePanel, setVehiclePanel] = useState(false)
   const [confirmRidePannel, setConfirmRidePannel] = useState(false)  
 
   const [vehicleFound, setVehicleFound] = useState(false)
+  const [waitingForDriver, asetWaitingForDriver] = useState(false)
+
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -92,6 +97,19 @@ const Home = () => {
     }
   }, [vehicleFound])
 
+  useGSAP(function(){
+    if(waitingForDriver){
+      gsap.to(waitingForDriverRef.current, {
+      transform: 'translateY(0)',
+    })
+    }
+    else{
+      gsap.to(waitingForDriverRef.current, {
+      transform: 'translateY(100%)',
+    })
+    }
+  }, [waitingForDriver])
+
   return (
     <div className=' h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
@@ -146,7 +164,10 @@ const Home = () => {
         setConfirmRidePannel={setConfirmRidePannel}/>
       </div>
       <div ref={vehicleFoundRef}  className='fixed w-full translate-y-full p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
-        <LookingForDriver/>
+        <LookingForDriver setVehicleFound={setVehicleFound}/>
+      </div>
+      <div ref={waitingForDriverRef} className='fixed w-full  p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
+        <WaitForDriver waitingForDriver={waitingForDriver}/>
       </div>
     </div>
   )
