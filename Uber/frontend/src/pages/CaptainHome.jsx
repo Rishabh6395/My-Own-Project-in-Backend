@@ -1,8 +1,29 @@
-import React from 'react'
+/* eslint-disable no-unused-vars */
+import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CaptainDetails from '../components/CaptainDetails'
+import RidePopup from '../components/RidePopup'
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
 
 const CaptainHome = () => {
+
+  const [ridePopupPanel, setRidePopupPanel] = useState(true)
+  const ridePopupPanelRef = useRef(null)
+
+  useGSAP(function(){
+    if(ridePopupPanel){
+      gsap.to(ridePopupPanelRef.current, {
+      transform: 'translateY(0)',
+    })
+    }
+    else{
+      gsap.to(ridePopupPanelRef.current, {
+      transform: 'translateY(100%)',
+    })
+    }
+  }, [ridePopupPanel])
+
 //   const location = useLocation()
     // const { ride } = location.state || {} 
   return (
@@ -21,6 +42,9 @@ const CaptainHome = () => {
                 <div className='h-2/5 p-4 '>
                     <CaptainDetails/>
                 </div>
+                  <div ref={ridePopupPanelRef} className='fixed w-full translate-y-full p-3 py-10 pt-12 px-3 z-10 bottom-0 bg-white'>
+                    <RidePopup setRidePopupPanel={setRidePopupPanel}/>
+                  </div>
             </div>
         </div>
   )
