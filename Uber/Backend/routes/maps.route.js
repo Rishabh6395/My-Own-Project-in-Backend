@@ -10,4 +10,17 @@ router.get("/get-coordinate",
     query("address").isString().isLength({ min: 3 }),
     authMiddleware.authUser, mapsController.getCoordiates);
 
+router.get('/get-distance-time', 
+    query("origin").isString().isLength({ min: 3 }),
+    query("destination").isString().isLength({ min: 3 }),
+    authMiddleware.authUser,
+    mapsController.getDistanceTime
+)
+
+router.get('/get-suggestions',
+    query("address").isString().isLength({ min: 3 }),
+    authMiddleware.authUser,
+    mapsController.getSuggestions
+)
+
 module.exports = router;
