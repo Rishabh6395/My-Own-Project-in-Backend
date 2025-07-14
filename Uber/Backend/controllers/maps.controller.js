@@ -43,10 +43,14 @@ module.exports.getSuggestions = async (req, res, next) => {
             return res.status(400).json({ errors: errors.array() });
         }
         const { address } = req.query;
+        // Only process if address is at least 3 characters
+        if (!address || address.length < 3) {
+            return res.status(200).json({ suggestions: [] });
+        }
         const suggestions = await mapsService.getSuggestions(address);
-        res.status(200).json(suggestions);
+        res.status(200).json({ suggestions });
     } catch (error) {
         console.error(error)
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 }

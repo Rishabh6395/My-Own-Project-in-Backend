@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react'
 import {useGSAP} from '@gsap/react'
 import { gsap } from 'gsap'
+import axios from 'axios'
 import 'remixicon/fonts/remixicon.css'
 import LocationSearchPanel from '../components/LocationSearchPanel'
 import VehiclePanel from '../components/vehiclePanel'
@@ -10,7 +11,6 @@ import LookingForDriver from '../components/LookingForDriver'
 import WaitForDriver from '../components/WaitForDriver'
 
 const Home = () => {
-
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState("")
   const [panelOpen, setPanelOpen] = useState(false)  
@@ -22,13 +22,37 @@ const Home = () => {
   const panelCloseRef = useRef(null)
   const [vehiclePanel, setVehiclePanel] = useState(false)
   const [confirmRidePannel, setConfirmRidePannel] = useState(false)  
-
   const [vehicleFound, setVehicleFound] = useState(false)
   const [waitingForDriver, asetWaitingForDriver] = useState(false)
 
+  // New state for suggestions and active field
+  const [suggestions, setSuggestions] = useState([])
+  const [activeField, setActiveField] = useState('') // 'pickup' or 'destination'
 
   const submitHandler = (e) => {
     e.preventDefault()
+  }
+
+  // Fetch suggestions from backend
+  const fetchSuggestions = async (query) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+        {
+          params: { address: query },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+      setSuggestions(res.data.suggestions || []);
+    } catch (err) {
+      setSuggestions([]);
+    }
   }
 
   useGSAP(function () {
@@ -59,13 +83,11 @@ const Home = () => {
   useGSAP(function(){
     if(vehiclePanel){
       gsap.to(vehiclePanelRef.current, {
-      // height: '0%',
       transform: 'translateY(0)',
     })
     }
     else{
       gsap.to(vehiclePanelRef.current, {
-      // height: '100%',
       transform: 'translateY(100%)',
     })
     }
@@ -131,27 +153,42 @@ const Home = () => {
           }}>
             <div className='line absolute h-16 w-1 top-[43%] left-10 bg-gray-800 rounded-full '></div>
             <input
-            onClick={() => {
-              setPanelOpen(true)
-            }}
-            value={pickup}
-            onChange={(e) => {
-              setPickup(e.target.value)
-            }}
-            className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full mt-5' type="text" placeholder='Add a pickup location'/>
+              onClick={() => {
+                setPanelOpen(true)
+                setActiveField('pickup')
+                fetchSuggestions(pickup)
+              }}
+              value={pickup}
+              onChange={(e) => {
+                setPickup(e.target.value)
+                setActiveField('pickup')
+                fetchSuggestions(e.target.value)
+              }}
+              className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full mt-5' type="text" placeholder='Add a pickup location'/>
             <input
-            onClick={() => {
-              setPanelOpen(true)
-            }}
-            value={destination}
-            onChange={(e) => {
-              setDestination(e.target.value)
-            }}
-            className='bg-[#eee] px-12 py-2 text-lg rounded-lg mt-3 w-full' type="text" placeholder='Enter your destination'/>
+              onClick={() => {
+                setPanelOpen(true)
+                setActiveField('destination')
+                fetchSuggestions(destination)
+              }}
+              value={destination}
+              onChange={(e) => {
+                setDestination(e.target.value)
+                setActiveField('destination')
+                fetchSuggestions(e.target.value)
+              }}
+              className='bg-[#eee] px-12 py-2 text-lg rounded-lg mt-3 w-full' type="text" placeholder='Enter your destination'/>
           </form>
           </div>
           <div ref={panelRef} className='h-0 opacity-0 bg-white'>
-            <LocationSearchPanel setPanelOpen={setPanelOpen}  setVehiclePanel={setVehiclePanel} />
+            <LocationSearchPanel 
+              setPanelOpen={setPanelOpen}  
+              setVehiclePanel={setVehiclePanel}
+              suggestions={suggestions}
+              setPickup={setPickup}
+              setDestination={setDestination}
+              activeField={activeField}
+            />
           </div>
         </div>
       </div>

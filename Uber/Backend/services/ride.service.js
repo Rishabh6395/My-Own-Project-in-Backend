@@ -1,5 +1,6 @@
 const rideModel = require("../models/ride.model");
 const mapService = require("../services/maps.service");
+const crypto = require("crypto");
 
 async function getFare(pickup, destination, vehicleType) {
   if (!pickup || !destination || !vehicleType) {
@@ -37,6 +38,13 @@ async function getFare(pickup, destination, vehicleType) {
   return fare;
 }
 
+function getOtp(num) {
+  const min = Math.pow(10, num - 1);
+  const max = Math.pow(10, num) - 1;
+  const otp = crypto.randomInt(min, max + 1);
+  return otp.toString(); // Convert to string for schema
+}
+
 module.exports.createRide = async ({
   user,
   pickup,
@@ -53,6 +61,7 @@ module.exports.createRide = async ({
     userId: user._id,
     pickup,
     destination,
+    otp: getOtp(6),
     fare: fareObj[vehicleType], // Only the selected vehicle's fare
     vehicleType,
     distance: parseFloat(distanceTime.distance), // Save distance if your schema requires it
