@@ -25,7 +25,7 @@ const VehiclePanel = (props) => {
           <div className='ml-4 w-1/2'>
             <h4 className='text-base font-medium'>Moto <span><i className="ri-user-3-fill"></i>1</span></h4>
             <h5 className='text-sm font-medium'>3 mins away</h5>
-            <p className='text-xs text-gray-600'>Affordable, Motorcycle rides</p>
+            <p className='text-xs text-gray-600'>Affordable, moto rides</p>
           </div>
         <h2 className='text-lg pl-6 font-semibold'>$6.00</h2>
         </div>
