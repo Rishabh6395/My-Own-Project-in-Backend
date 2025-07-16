@@ -132,6 +132,11 @@ const Home = () => {
     }
   }, [waitingForDriver])
 
+  function findTrip(){
+    setVehiclePanel(true)
+    setPanelOpen(false)
+  }
+
   return (
     <div className=' h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
@@ -179,6 +184,13 @@ const Home = () => {
               }}
               className='bg-[#eee] px-12 py-2 text-lg rounded-lg mt-3 w-full' type="text" placeholder='Enter your destination'/>
           </form>
+          <button 
+          onClick={() => {
+            findTrip()
+          }}
+          className="bg-black text-white w-full py-3 rounded-lg mt-4 font-semibold">
+            Find a Trip
+          </button>
           </div>
           <div ref={panelRef} className='h-0 opacity-0 bg-white'>
             <LocationSearchPanel 

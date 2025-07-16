@@ -7,7 +7,7 @@ const LocationSearchPanel = (props) => {
   return (
     <div>
       {suggestions.length === 0 && (
-        <div className='text-gray-400 text-center py-4'>No suggestions found</div>
+        <div className='text-gray-400 text-center pt-4 py-4'>No suggestions found</div>
       )}
       {suggestions.map(function(elem, idx){
         return (
@@ -17,8 +17,8 @@ const LocationSearchPanel = (props) => {
               } else if (activeField === 'destination') {
                 setDestination(elem)
               }
-              setPanelOpen(false)
-              setVehiclePanel(true)
+              // setPanelOpen(false)
+              // setVehiclePanel(true)
             }} 
             className='flex items-center border-2 p-3 rounded-xl my-2 border-gray-50 active:border-black gap-4 justify-start'>
             <h2 className='bg-[#eee] rounded-full h-8 w-12 flex items-center justify-center'><i className="ri-map-pin-fill"></i></h2>
