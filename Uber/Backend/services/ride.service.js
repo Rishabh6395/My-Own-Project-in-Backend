@@ -38,6 +38,8 @@ async function getFare(pickup, destination, vehicleType) {
   return fare;
 }
 
+module.exports.getFare = getFare;
+
 function getOtp(num) {
   const min = Math.pow(10, num - 1);
   const max = Math.pow(10, num) - 1;

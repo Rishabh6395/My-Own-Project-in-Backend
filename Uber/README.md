@@ -546,6 +546,80 @@ Logs out the authenticated captain by clearing the authentication token cookie a
 
 ---
 
+## Get Fare Estimate
+
+### Endpoint
+
+`GET /rides/get-rides`
+
+---
+
+### Description
+
+Returns fare estimates for a ride based on pickup, destination, and vehicle type.  
+Requires authentication (JWT token in the `Authorization` header).
+
+---
+
+### Query Parameters
+
+| Name         | Type   | Required | Description                |
+|--------------|--------|----------|----------------------------|
+| pickup       | string | Yes      | Pickup address             |
+| destination  | string | Yes      | Destination address        |
+| vehicleType  | string | Yes      | Vehicle type (`auto`, `car`, `moto`) |
+
+#### Example
+
+```
+/rides/get-rides?pickup=MG%20Road&destination=Airport&vehicleType=car
+```
+
+---
+
+### Responses
+
+#### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+    ```json
+    {
+      "auto": 120.5,
+      "car": 200.75,
+      "moto": 80.25
+    }
+    ```
+    *Each key is a vehicle type with its estimated fare.*
+
+#### Validation Error
+
+- **Status Code:** `400 Bad Request`
+- **Body:**
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "Invalid pickup address",
+          "param": "pickup",
+          "location": "query"
+        }
+      ]
+    }
+    ```
+
+#### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+    ```json
+    {
+      "message": "Unauthorized"
+    }
+    ```
+
+---
+
 ## Notes
 
 - All endpoints requiring authentication expect a JWT token in the `Authorization` header as `Bearer <token>`.

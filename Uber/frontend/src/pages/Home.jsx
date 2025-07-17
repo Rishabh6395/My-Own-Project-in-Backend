@@ -24,6 +24,7 @@ const Home = () => {
   const [confirmRidePannel, setConfirmRidePannel] = useState(false)  
   const [vehicleFound, setVehicleFound] = useState(false)
   const [waitingForDriver, asetWaitingForDriver] = useState(false)
+  const [fare, setFare] = useState({})
 
   // New state for suggestions and active field
   const [suggestions, setSuggestions] = useState([])
@@ -132,9 +133,18 @@ const Home = () => {
     }
   }, [waitingForDriver])
 
-  function findTrip(){
+  async function findTrip(){
     setVehiclePanel(true)
     setPanelOpen(false)
+
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+      params: { pickup, destination, vehicleType: 'car' }, // or 'auto'/'moto'
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    // setFare(response.data.fare)
+    console.log(response.data)
   }
 
   return (
