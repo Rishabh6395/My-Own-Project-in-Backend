@@ -138,13 +138,14 @@ const Home = () => {
     setPanelOpen(false)
 
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-      params: { pickup, destination, vehicleType: 'car' }, // or 'auto'/'moto'
+      params: { pickup, destination, vehicleType: 'auto' }, 
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
     // setFare(response.data.fare)
     console.log(response.data)
+    setFare(response.data);
   }
 
   return (
@@ -216,7 +217,7 @@ const Home = () => {
       </div>
 
       <div  ref={vehiclePanelRef} className='fixed w-full translate-y-full p-3 py-10 pt-12 px-3 z-10 bottom-0 bg-white'>
-        <VehiclePanel setConfirmRidePannel={setConfirmRidePannel} setVehiclePanel={setVehiclePanel}/>
+        <VehiclePanel fare={fare} setConfirmRidePannel={setConfirmRidePannel} setVehiclePanel={setVehiclePanel}/>
       </div>
       <div  ref={confirmRidePanelRef} className='fixed w-full translate-y-full p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
         <ConfirmRide setVehiclePanel={setVehiclePanel} setVehicleFound={setVehicleFound}

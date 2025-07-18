@@ -26,6 +26,7 @@ router.get('/get-fare',
     authMiddleware.authUser,
     query("pickup").isString().isLength({ min: 3 }).withMessage("Invalid pickup address"),
     query("destination").isString().isLength({ min: 3 }).withMessage("Invalid destination address"),
+    query("vehicleType").isString().isLength({ min: 3 }).withMessage("Invalid vehicle type"),
     rideController.getFare
 )
 

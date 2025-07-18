@@ -16,7 +16,7 @@ const VehiclePanel = (props) => {
             <h5 className='text-sm font-medium'>2 mins away</h5>
             <p className='text-xs text-gray-600'>Affordable, compact rides</p>
           </div>
-        <h2 className='text-lg pl-6 font-semibold'>$15.00</h2>
+        <h2 className='text-lg pl-6 font-semibold'>₹{props.fare.car}</h2>
         </div>
         <div onClick={() => {props.setVehiclePanel(true)
           props.setConfirmRidePannel(true)
@@ -27,7 +27,7 @@ const VehiclePanel = (props) => {
             <h5 className='text-sm font-medium'>3 mins away</h5>
             <p className='text-xs text-gray-600'>Affordable, moto rides</p>
           </div>
-        <h2 className='text-lg pl-6 font-semibold'>$6.00</h2>
+        <h2 className='text-lg pl-6 font-semibold'>₹{props.fare.moto}</h2>
         </div>
         <div onClick={() => {props.setVehiclePanel(true)
           props.setConfirmRidePannel(true)
@@ -38,7 +38,7 @@ const VehiclePanel = (props) => {
             <h5 className='text-sm font-medium'>3 mins away</h5>
             <p className='text-xs text-gray-600'>Affordable, Auto rides</p>
           </div>
-        <h2 className='text-lg pl-6 font-semibold'>$12.00</h2>
+        <h2 className='text-lg pl-6 font-semibold'>₹{props.fare.auto}</h2>
         </div>
     </div>
   )
