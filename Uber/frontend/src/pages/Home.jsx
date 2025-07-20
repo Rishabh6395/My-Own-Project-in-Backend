@@ -25,6 +25,7 @@ const Home = () => {
   const [vehicleFound, setVehicleFound] = useState(false)
   const [waitingForDriver, asetWaitingForDriver] = useState(false)
   const [fare, setFare] = useState({})
+  const [vehicleType, setVehicleType] = useState(null)
 
   // New state for suggestions and active field
   const [suggestions, setSuggestions] = useState([])
@@ -148,6 +149,19 @@ const Home = () => {
     setFare(response.data);
   }
 
+  async function createRide(){
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+      pickup,
+      destination,
+      vehicleType
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    console.log(response.data)
+  }
+
   return (
     <div className=' h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
@@ -217,14 +231,26 @@ const Home = () => {
       </div>
 
       <div  ref={vehiclePanelRef} className='fixed w-full translate-y-full p-3 py-10 pt-12 px-3 z-10 bottom-0 bg-white'>
-        <VehiclePanel fare={fare} setConfirmRidePannel={setConfirmRidePannel} setVehiclePanel={setVehiclePanel}/>
+        <VehiclePanel
+        selectVehicle={setVehicleType}
+        fare={fare} setConfirmRidePannel={setConfirmRidePannel} setVehiclePanel={setVehiclePanel}/>
       </div>
       <div  ref={confirmRidePanelRef} className='fixed w-full translate-y-full p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
-        <ConfirmRide setVehiclePanel={setVehiclePanel} setVehicleFound={setVehicleFound}
+        <ConfirmRide
+        createRide={createRide}
+        pickup={pickup} destination={destination}
+        fare={fare}
+        vehicleType={vehicleType}
+        setVehiclePanel={setVehiclePanel} setVehicleFound={setVehicleFound}
         setConfirmRidePannel={setConfirmRidePannel}/>
       </div>
       <div ref={vehicleFoundRef}  className='fixed w-full translate-y-full p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
-        <LookingForDriver setVehicleFound={setVehicleFound}/>
+        <LookingForDriver 
+        createRide={createRide}
+        pickup={pickup} destination={destination}
+        fare={fare}
+        vehicleType={vehicleType}
+        setVehicleFound={setVehicleFound}/>
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full  p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
         <WaitForDriver waitingForDriver={waitingForDriver}/>
