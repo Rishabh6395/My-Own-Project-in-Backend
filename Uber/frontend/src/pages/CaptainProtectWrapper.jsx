@@ -4,39 +4,46 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const CaptainProtectedWrapper = ({ children }) => {
-    const token = localStorage.getItem('token')
-    const navigate = useNavigate()
+  const token = localStorage.getItem('token')
+  const navigate = useNavigate()
 
-    const {captain, setCaptain} = React.useContext(CaptainDataContext)
-    const [isLoading, setIsLoading] = useState(true)
+  const { setCaptain } = useContext(CaptainDataContext)
+  const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
-        if (!token) {
-            navigate('/captain-login')
-        }
-    }, [token, navigate])
+  useEffect(() => {
+    const fetchCaptainProfile = async () => {
+      if (!token) {
+        navigate('/captain-login')
+        return
+      }
 
-    axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`, {headers: {Authorization: `Bearer ${token}`}}).then(res => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/captains/profile`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
         if (res.status === 200) {
-            const data = res.data
-            setCaptain(data.captain)
-            setIsLoading(false)
+          const data = res.data
+          setCaptain(data) // or `data.captain` if backend wraps it
+          setIsLoading(false)
         }
-    }).catch(err => {
-        console.log(err)
+      } catch (err) {
+        console.error('Error fetching captain profile:', err)
         localStorage.removeItem('token')
         navigate('/captain-login')
-    })
-
-    if(isLoading) {
-        return <h1>Loading...</h1>
+      }
     }
 
-    return (
-        <>
-            {children}
-        </>
-    )
+    fetchCaptainProfile()
+  }, [token, navigate, setCaptain])
+
+  if (isLoading) {
+    return <h1>Loading...</h1>
+  }
+
+  return <>{children}</>
 }
 
 export default CaptainProtectedWrapper
