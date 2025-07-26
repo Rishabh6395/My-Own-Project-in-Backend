@@ -22,6 +22,8 @@ function initializeSocket(server) {
     socket.on("join", async (data) => {
       const { userId, userType } = data;
 
+      console.log(`Socket ${socket.id} joined room for user ${userId}`);
+
       try {
         if(userType === "user") {
             await userModel.findByIdAndUpdate(userId, { socketId: socket.id });

@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import {useGSAP} from '@gsap/react'
 import { gsap } from 'gsap'
 import axios from 'axios'
 import 'remixicon/fonts/remixicon.css'
 import LocationSearchPanel from '../components/LocationSearchPanel'
-import VehiclePanel from '../components/vehiclePanel'
+import VehiclePanel from '../components/VehiclePanel' // Fix import
 import ConfirmRide from '../components/ConfirmRide'
 import LookingForDriver from '../components/LookingForDriver'
 import WaitForDriver from '../components/WaitForDriver'
+import { SocketContext } from '../context/SocketContext'
+import { UserDataContext } from '../context/UserContext'
 
 const Home = () => {
   const [pickup, setPickup] = useState('')
@@ -23,13 +25,24 @@ const Home = () => {
   const [vehiclePanel, setVehiclePanel] = useState(false)
   const [confirmRidePannel, setConfirmRidePannel] = useState(false)  
   const [vehicleFound, setVehicleFound] = useState(false)
-  const [waitingForDriver, asetWaitingForDriver] = useState(false)
+  const [waitingForDriver, setWaitingForDriver] = useState(false) // Fix setter name
   const [fare, setFare] = useState({})
   const [vehicleType, setVehicleType] = useState(null)
 
   // New state for suggestions and active field
   const [suggestions, setSuggestions] = useState([])
   const [activeField, setActiveField] = useState('') // 'pickup' or 'destination'
+
+  const { socket, sendMessage, receiveMessage } = useContext(SocketContext)
+
+  const { user } = useContext(UserDataContext)
+
+
+  useEffect(() => {
+    if (user && user._id) { // Guard for user._id
+      socket.emit('join', { userId: user._id, userType: "user" });
+    }
+  }, [user])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -139,12 +152,11 @@ const Home = () => {
     setPanelOpen(false)
 
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-      params: { pickup, destination, vehicleType: 'auto' }, 
+      params: { pickup, destination, vehicleType }, // Use selected vehicleType
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
-    // setFare(response.data.fare)
     console.log(response.data)
     setFare(response.data);
   }

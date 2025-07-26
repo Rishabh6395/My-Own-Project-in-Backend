@@ -20,17 +20,17 @@ const SocketProvider = ({ children }) => {
   }, []);
 
   // Send a message to a specific event
-  const sendMessage = (eventName, message) => {
-    socket.emit(eventName, message);
-  };
+  // const sendMessage = (eventName, message) => {
+  //   socket.emit(eventName, message);
+  // };
 
-  // Listen for messages from a specific event
-  const receiveMessage = (eventName, callback) => {
-    socket.on(eventName, callback);
-  };
+  // // Listen for messages from a specific event
+  // const receiveMessage = (eventName, callback) => {
+  //   socket.on(eventName, callback);
+  // };
 
   return (
-    <SocketContext.Provider value={{ sendMessage, receiveMessage}}>
+    <SocketContext.Provider value={{ socket }}>
       {children}
     </SocketContext.Provider>
   );
