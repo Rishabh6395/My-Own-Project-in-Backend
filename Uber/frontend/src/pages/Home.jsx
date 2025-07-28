@@ -39,6 +39,7 @@ const Home = () => {
 
 
   useEffect(() => {
+    console.log(user)
     if (user && user._id) { // Guard for user._id
       socket.emit('join', { userId: user._id, userType: "user" });
     }
