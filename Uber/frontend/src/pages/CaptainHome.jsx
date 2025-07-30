@@ -45,6 +45,10 @@ const CaptainHome = () => {
       // return () => clearInterval(intervalId);
   })
 
+  socket.on('new-ride', (data) => {
+    console.log(data);
+    // setRidePopupPanel(true)
+  })
 
 
   useGSAP(function(){

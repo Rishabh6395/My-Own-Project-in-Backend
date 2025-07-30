@@ -62,12 +62,15 @@ function initializeSocket(server) {
 /**
  * Sends a message to a specific socket ID.
  * @param {string} socketId - The target socket ID.
- * @param {string} event - The event name.
+//  * @param {string} event - The event name.
  * @param {any} message - The message payload.
  */
-function sendMessageToSocketId(socketId, event, message) {
+function sendMessageToSocketId(socketId, messageObject) {
+
+  console.log(`Sending message to socket ${socketId}:`, messageObject);
+
   if (io) {
-    io.to(socketId).emit(event, message);
+    io.to(socketId).emit(messageObject.event, messageObject.data);
     console.log(`Sent event '${event}' to socket ${socketId}:`, message);
   } else {
     console.log("Socket.io not initialized.");

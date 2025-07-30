@@ -148,6 +148,10 @@ module.exports.getSuggestions = async (address) => {
 
 
 module.exports.getCaptainInTheRaidius = async (ltd, lng, radius) => {
+
+    // raidus in km
+    
+
     const captains = await captainModel.find({
         location: {
             $geoWithin: {
