@@ -24,6 +24,8 @@ module.exports.createRide = async(req, res) =>{
         
         const captainInRaidus = await mapService.getCaptainInTheRaidius(pickupCoordinates.latitude, pickupCoordinates.longitude, 5);
 
+        console.log(captainInRaidus)
+
         ride.otp =""
 
         captainInRaidus.map(captain => {
