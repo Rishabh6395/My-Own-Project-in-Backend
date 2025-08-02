@@ -47,10 +47,19 @@ function initializeSocket(server) {
         return socket.emit("error", "Invalid location data");
       }
 
-      await captainModel.findByIdAndUpdate(userId, { location:{
-        ltd: location.ltd,
-        lng: location.lng
-      } });
+      // await captainModel.findByIdAndUpdate(userId, { location:{
+      //   ltd: location.ltd,
+      //   lng: location.lng
+      // } });
+
+      await captainModel.findByIdAndUpdate(userId, { 
+            location: {
+                type: 'Point',
+                coordinates: [location.lng, location.ltd] // [longitude, latitude] order
+            },
+            status: 'active' // Set captain as active when location is updated
+        });
+        console.log(`Updated captain ${userId} location: [${location.lng}, ${location.ltd}]`);
     })
 
     socket.on("disconnect", () => {
