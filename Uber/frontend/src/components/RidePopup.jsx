@@ -1,6 +1,81 @@
 import React from 'react'
 
 const RidePopup = (props) => {
+
+  // Add comprehensive debugging
+  console.log('🔍 RidePopup Props Debug:');
+  console.log('Full props:', props);
+  console.log('props.ride:', props.ride);
+  console.log('props.ride type:', typeof props.ride);
+  console.log('props.ride stringified:', JSON.stringify(props.ride, null, 2));
+  
+  if (props.ride) {
+    console.log('props.ride.userId:', props.ride.userId);
+    console.log('props.ride.userId type:', typeof props.ride.userId);
+    if (props.ride.userId) {
+      console.log('props.ride.userId.fullname:', props.ride.userId.fullname);
+      if (props.ride.userId.fullname) {
+        console.log('firstname:', props.ride.userId.fullname.firstname);
+        console.log('lastname:', props.ride.userId.fullname.lastname);
+      }
+    }
+  }
+
+  // Add safety checks for props.ride and props.ride.userId
+  if (!props.ride) {
+    console.log('❌ No ride data available');
+    return (
+      <div>
+        <h5 className='p-1 text-center w-[94%] absolute top-0' onClick={() => props.setRidePopupPanel(false)}>
+          <i className="text-3xl text-gray-400 ri-arrow-down-wide-line"></i>
+        </h5>
+        <div className='flex items-center justify-center h-40'>
+          <p className='text-gray-500'>Loading ride data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!props.ride.userId) {
+    console.log('❌ No userId in ride data');
+    console.log('Available ride properties:', Object.keys(props.ride));
+    return (
+      <div>
+        <h5 className='p-1 text-center w-[94%] absolute top-0' onClick={() => props.setRidePopupPanel(false)}>
+          <i className="text-3xl text-gray-400 ri-arrow-down-wide-line"></i>
+        </h5>
+        <div className='flex items-center justify-center h-40'>
+          <p className='text-red-500'>Error: User ID not found in ride data</p>
+          <p className='text-sm text-gray-500'>Available properties: {Object.keys(props.ride).join(', ')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!props.ride.userId.fullname) {
+    console.log('❌ No fullname in userId');
+    console.log('Available userId properties:', Object.keys(props.ride.userId));
+    return (
+      <div>
+        <h5 className='p-1 text-center w-[94%] absolute top-0' onClick={() => props.setRidePopupPanel(false)}>
+          <i className="text-3xl text-gray-400 ri-arrow-down-wide-line"></i>
+        </h5>
+        <div className='flex items-center justify-center h-40'>
+          <p className='text-red-500'>Error: User fullname not available</p>
+          <p className='text-sm text-gray-500'>Available user properties: {Object.keys(props.ride.userId).join(', ')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Get user data with fallbacks
+  const userName = `${props.ride.userId.fullname.firstname || 'Unknown'} ${props.ride.userId.fullname.lastname || ''}`.trim();
+  const pickup = props.ride.pickup || 'Unknown pickup location';
+  const destination = props.ride.destination || 'Unknown destination';
+  const fare = props.ride.fare || 'N/A';
+
+  console.log('✅ Successfully extracted user data:', { userName, pickup, destination, fare });
+
   return (
     <div>
       <h5 className='p-1 text-center  w-[94%] absolute top-0' onClick={() => props.setRidePopupPanel(false)}><i className="text-3x l text-gray-400 ri-arrow-down-wide-line"></i></h5>
@@ -8,7 +83,7 @@ const RidePopup = (props) => {
       <div className='flex items-center justify-between p-3 bg-yellow-400 rounded-lg mt-4'>
         <div className='flex items-center gap-3'>
             <img className='h-12 w-12 object-cover rounded-full' src="https://img.freepik.com/free-photo/portrait-man-looking-front-him_23-2148422271.jpg?semt=ais_hybrid&w=740" alt="" />
-            <h2 className='text-lg font-medium'>Harsh Patel</h2>
+            <h2 className='text-lg font-medium'>{userName}</h2>
 
         </div>
         <h5 className='text-lg font-semibold'>2.2 KM</h5>
@@ -21,20 +96,20 @@ const RidePopup = (props) => {
             <i className="ri-map-pin-user-line"></i>
             <div>
               <h3 className='font-semibold text-lg'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab, Pune</p>
+              <p className='text-sm -mt-1 text-gray-600'>{pickup}</p>
             </div>
           </div>
           <div  className='flex items-center gap-5 p-3 border-b-2'>
             <i className="text-lg ri-map-pin-2-fill"></i>
             <div>
                 <h3 className='font-semibold text-lg'>562/11-A</h3>
-                <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab, Pune</p>
+                <p className='text-sm -mt-1 text-gray-600'>{destination}</p>
               </div>
             </div>
             <div  className='flex items-center gap-5 p-3'>
               <i className="ri-currency-line"></i>
               <div>
-                  <h3 className='font-semibold text-lg'>$20.4</h3>
+                  <h3 className='font-semibold text-lg'>{fare}</h3>
                   <p className='text-sm -mt-1 text-gray-600'>Cash</p>
               </div>
             </div>

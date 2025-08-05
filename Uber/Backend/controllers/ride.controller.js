@@ -150,7 +150,19 @@ module.exports.createRide = async(req, res) =>{
         ride.otp = "";
         const rideWithUser = await rideModel.findOne({ _id: ride._id }).populate("userId");
 
+        console.log('🔍 Populated ride data:', JSON.stringify(rideWithUser, null, 2));
+        console.log('🔍 User data in ride:', rideWithUser?.userId);
+
+        // Validate that the user data was populated correctly
+        if (!rideWithUser || !rideWithUser.userId) {
+            console.error('❌ Failed to populate user data in ride');
+            return res.status(500).json({ message: 'Failed to populate ride with user data' });
+        }
+
         activeCaptains.forEach(captain => {
+
+            console.log("Ye mera console hai",captain, ride)
+
             console.log(`📤 Sending ride to: ${captain.fullname?.firstname} (${captain.socketId})`);
             sendMessageToSocketId(captain.socketId, {
                 event: "new-ride",
