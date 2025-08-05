@@ -76,14 +76,23 @@ function initializeSocket(server) {
  */
 function sendMessageToSocketId(socketId, messageObject) {
 
+  // console.log(`Sending message to socket ${socketId}:`, messageObject);
+
+  // if (io) {
+  //   io.to(socketId).emit(messageObject.event, messageObject.data);
+  //   console.log(`Sent event '${event}' to socket ${socketId}:`, message);
+  // } else {
+  //   console.log("Socket.io not initialized.");
+  // }
+
   console.log(`Sending message to socket ${socketId}:`, messageObject);
 
-  if (io) {
-    io.to(socketId).emit(messageObject.event, messageObject.data);
-    console.log(`Sent event '${event}' to socket ${socketId}:`, message);
-  } else {
-    console.log("Socket.io not initialized.");
-  }
+    if (io) {
+        io.to(socketId).emit(messageObject.event, messageObject.data);
+        console.log(`✅ Sent event '${messageObject.event}' to socket ${socketId}:`, messageObject.data);
+    } else {
+        console.log("❌ Socket.io not initialized.");
+    }
 }
 
 module.exports = {

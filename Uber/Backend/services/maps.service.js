@@ -147,20 +147,108 @@ module.exports.getSuggestions = async (address) => {
 };
 
 
-module.exports.getCaptainInTheRaidius = async (lng, ltd, radius) => {
+module.exports.getCaptainInTheRaidius = async (lat, lng, radius) => {
 
     // radius in km
 
 
-    const captains = await captainModel.find({
-        location: {
-            $geoWithin: {
-                $centerSphere: [ [ lng, ltd ], radius / 6371 ]
-            }
+    // const captains = await captainModel.find({
+    //     location: {
+    //         $geoWithin: {
+    //             $centerSphere: [ [ lng, ltd ], radius / 6371 ]
+    //         }
+    //     }
+    // });
+
+    // return captains;
+
+
+    try {
+        console.log(`\n=== GEOSPATIAL QUERY DEBUG ===`);
+        console.log(`🎯 Search center: lat=${lat}, lng=${lng}, radius=${radius}km`);
+        
+        // First check: Do we have ANY captains in the database?
+        const totalCaptains = await captainModel.countDocuments({});
+        console.log(`📊 Total captains in database: ${totalCaptains}`);
+        
+        if (totalCaptains === 0) {
+            console.log('❌ No captains found in database at all!');
+            return [];
         }
-    });
+        
+        // Second check: Show all captains regardless of location
+        const allCaptains = await captainModel.find({});
+        console.log(`📋 All captains details:`);
+        allCaptains.forEach((captain, index) => {
+            console.log(`   Captain ${index + 1}: ${captain.fullname?.firstname} - ${captain.email}`);
+            console.log(`   Status: ${captain.status}`);
+            console.log(`   Location:`, captain.location);
+            console.log(`   Coordinates:`, captain.location?.coordinates);
+        });
+        
+        // Third check: Find captains with any location data
+        const captainsWithLocation = await captainModel.find({
+            'location.coordinates': { $exists: true }
+        });
+        console.log(`📍 Captains with location field: ${captainsWithLocation.length}`);
+        
+        // Fourth check: Find captains with non-zero coordinates
+        const captainsWithValidLocation = await captainModel.find({
+            'location.coordinates.0': { $ne: 0 },
+            'location.coordinates.1': { $ne: 0 }
+        });
+        console.log(`✅ Captains with valid coordinates: ${captainsWithValidLocation.length}`);
+        
+        // Fifth check: Try geospatial query WITHOUT any filters
+        console.log(`🔍 Attempting geospatial query...`);
+        const nearbyAny = await captainModel.find({
+            location: {
+                $geoWithin: {
+                    $centerSphere: [ [ lng, lat ], radius / 6371 ]
+                }
+            }
+        });
+        console.log(`📍 Captains found by geospatial query (any status): ${nearbyAny.length}`);
+        
+        // If geospatial query fails, try distance calculation manually
+        if (nearbyAny.length === 0 && captainsWithValidLocation.length > 0) {
+            console.log(`🔧 Geospatial query failed, trying manual distance calculation...`);
+            
+            const captainsWithDistance = [];
+            for (const captain of captainsWithValidLocation) {
+                const [captainLng, captainLat] = captain.location.coordinates;
+                const distance = calculateDistance(lat, lng, captainLat, captainLng);
+                console.log(`   ${captain.fullname?.firstname}: ${distance.toFixed(2)}km away`);
+                
+                if (distance <= radius) {
+                    captainsWithDistance.push(captain);
+                }
+            }
+            
+            console.log(`📍 Captains within ${radius}km (manual calculation): ${captainsWithDistance.length}`);
+            console.log(`=== END GEOSPATIAL DEBUG ===\n`);
+            return captainsWithDistance;
+        }
+        
+        console.log(`=== END GEOSPATIAL DEBUG ===\n`);
+        return nearbyAny;
 
-    return captains;
+    } catch (error) {
+        console.error('❌ Error in getCaptainInTheRaidius:', error);
+        throw error;
+    }
 
 
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
 }
