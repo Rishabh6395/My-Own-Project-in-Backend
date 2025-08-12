@@ -3,7 +3,7 @@ const mapService = require("../services/maps.service");
 const crypto = require("crypto");
 
 async function getFare(pickup, destination, vehicleType) {
-  if (!pickup || !destination || !vehicleType) {
+  if (!pickup || !destination) {
     throw new Error("All fields are required");
   }
 
@@ -69,6 +69,30 @@ module.exports.createRide = async ({
     distance: parseFloat(distanceTime.distance), // Save distance if your schema requires it
   });
   return await ride.save();
+};
+
+module.exports.confirmRide = async (rideId) => {
+  // const ride = await rideModel.findById(rideId);
+  if (!rideId) {
+    throw new Error("Ride not found");
+  }
+
+  await rideModel.findOneAndUpdate({
+    _id: rideId
+  }, {
+    status: 'accepted',
+    captain: captain._id
+  });
+
+  const ride = await rideModel.findOne({
+    _id: rideId
+  }).populate('userId');
+
+  if (!ride) {
+    throw new Error("Ride not found");
+  }
+
+  return ride;
 };
 
 module.exports.getFare = getFare;

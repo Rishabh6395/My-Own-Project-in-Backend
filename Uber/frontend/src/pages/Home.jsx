@@ -45,6 +45,10 @@ const Home = () => {
     }
   }, [user])
 
+  socket.on('ride-confirmed', ride => {
+    setWaitingForDriver(true)
+  })
+
   const submitHandler = (e) => {
     e.preventDefault()
   }
@@ -153,7 +157,7 @@ const Home = () => {
     setPanelOpen(false)
 
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-      params: { pickup, destination, vehicleType }, // Use selected vehicleType
+      params: { pickup, destination}, // Use selected vehicleType
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -162,7 +166,21 @@ const Home = () => {
     setFare(response.data);
   }
 
+  // async function createRide(){
+  //   const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+  //     pickup,
+  //     destination,
+  //     vehicleType
+  //   }, {
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`
+  //     }
+  //   })
+  //   console.log(response.data)
+  // }
+
   async function createRide(){
+  try {
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
       pickup,
       destination,
@@ -172,8 +190,38 @@ const Home = () => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
-    console.log(response.data)
+    
+    console.log('✅ Ride created successfully:', response.data)
+    
+    // Close the confirm panel and show "Looking for Driver"
+    setConfirmRidePannel(false)
+    setVehicleFound(true) // This will show the "Looking for Driver" component
+    
+  } catch (error) {
+    console.error('❌ Error creating ride:', error)
+    // You might want to show an error message to the user here
   }
+}
+
+// Fixed socket setup in Home.jsx useEffect
+useEffect(() => {
+  console.log(user)
+  if (user && user._id) {
+    socket.emit('join', { userId: user._id, userType: "user" });
+  }
+
+  // Add socket listeners inside useEffect
+  socket.on('ride-confirmed', (ride) => {
+    console.log('🎉 Ride confirmed:', ride);
+    setVehicleFound(false); // Hide "Looking for Driver"
+    setWaitingForDriver(true); // Show "Wait for Driver"
+  });
+
+  // Cleanup function to remove listeners
+  return () => {
+    socket.off('ride-confirmed');
+  };
+}, [user, socket]) // Add socket to dependencies
 
   return (
     <div className=' h-screen relative overflow-hidden'>
