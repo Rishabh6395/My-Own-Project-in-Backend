@@ -197,7 +197,7 @@ module.exports.confirmRide = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const { rideId } = req.params;
+    const { rideId } = req.body;
     try {
         const ride =  await rideService.confirmRide(rideId, req.captain._id);
 

@@ -50,25 +50,46 @@ const CaptainHome = () => {
 
   async function confirmRide(){
     
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {rideId: ride._id}, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
+    // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, 
+    //   {rideId: ride._id}, {
+    //     captainId: captain._id}, 
+        
+    //     {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
+      rideId: ride._id,
+      captainId: captain._id
+    },{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }) 
 
     setRidePopupPanel(false)
     setConfirmRidePopupPanel(true)
   }
 
-  useEffect(() => {
-    socket.on('ride-request', (data) => {
-      console.log(data);
-      setRide(data)
-      setRidePopupPanel(true)
-    })
-  })
+  // useEffect(() => {
+  //   socket.on('ride-request', (data) => {
+  //     console.log(data);
+  //     setRide(data)
+  //     setRidePopupPanel(true)
+  //   })
+  // })
 
   // socket.on('new-ride', (data) => {
   //   console.log(data);
   //   setRide(data)
   //   setRidePopupPanel(true)
   // })
+
+  useEffect(() => {
+  socket.on('new-ride', (data) => {
+    console.log(data);
+    setRide(data)
+    setRidePopupPanel(true)
+  })
+}, [socket])
 
 
   useGSAP(function(){
