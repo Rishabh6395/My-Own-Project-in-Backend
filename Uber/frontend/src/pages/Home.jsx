@@ -28,6 +28,7 @@ const Home = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false) // Fix setter name
   const [fare, setFare] = useState({})
   const [vehicleType, setVehicleType] = useState(null)
+  const [ride, setRide] = useState(null)
 
   // New state for suggestions and active field
   const [suggestions, setSuggestions] = useState([])
@@ -46,7 +47,9 @@ const Home = () => {
   }, [user])
 
   socket.on('ride-confirmed', ride => {
+    // setVehicleFound(false)
     setWaitingForDriver(true)
+    setRide(ride)
   })
 
   const submitHandler = (e) => {
@@ -314,7 +317,11 @@ useEffect(() => {
         setVehicleFound={setVehicleFound}/>
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full  p-3 pt-12 py-6 px-3 z-10 bottom-0 bg-white'>
-        <WaitForDriver waitingForDriver={waitingForDriver}/>
+        <WaitForDriver 
+        ride={ride}
+        setWaitingForDriver={setWaitingForDriver}
+        setVehicleFound={setVehicleFound}
+        waitingForDriver={waitingForDriver}/>
       </div>
     </div>
   )
