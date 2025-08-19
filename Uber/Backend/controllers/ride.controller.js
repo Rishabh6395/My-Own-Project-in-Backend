@@ -206,7 +206,30 @@ module.exports.confirmRide = async (req, res) => {
             data: ride
         });
 
+        console.log("🚖 [createRide] Ride response before sending:");
+        console.log(JSON.stringify(ride, null, 2));
         res.status(200).json(ride);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+module.exports.startRide = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { rideId } = req.body;
+    try {
+        const ride =  await rideService.startRide({rideId, otp,  captain: req.captain});
+
+        sendMessageToSocketId(ride.userId.socketId, {
+            event: "ride-started",
+            data: ride
+        });
+
+        
+        return res.status(200).json(ride);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
