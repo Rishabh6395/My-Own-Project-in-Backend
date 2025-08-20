@@ -103,7 +103,7 @@ module.exports.startRide = async ({rideId, otp, captain}) => {
     throw new Error("Ride or otp or captain not found");
   } 
 
-  const ride = await rideModel.findeOne({
+  const ride = await rideModel.findOne({
     _id: rideId
   }).populate('userId').populate('captain').select('+otp');
 
