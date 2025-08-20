@@ -219,7 +219,7 @@ module.exports.startRide = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const { rideId } = req.body;
+    const { rideId, otp } = req.body;
     try {
         const ride =  await rideService.startRide({rideId, otp,  captain: req.captain});
 

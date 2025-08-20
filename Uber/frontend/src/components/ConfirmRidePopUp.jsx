@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 const ConfirmRidePopUp = (props) => {
 
@@ -17,9 +18,9 @@ const ConfirmRidePopUp = (props) => {
       <div className='flex items-center justify-between p-3 bg-yellow-400 rounded-lg mt-4'>
         <div className='flex items-center gap-3'>
             <img className='h-12 w-12 object-cover rounded-full' src="https://img.freepik.com/free-photo/portrait-man-looking-front-him_23-2148422271.jpg?semt=ais_hybrid&w=740" alt="" />
-            <h2 className='text-lg font-medium'></h2>
+            <h2 className='text-xl font-medium'>{props.ride.userId.fullname.firstname}</h2>
 
-        </div>c
+        </div>
         <h5 className='text-lg font-semibold'>2.2 KM</h5>
       </div>
 
