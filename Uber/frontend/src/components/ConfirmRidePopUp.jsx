@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const ConfirmRidePopUp = (props) => {
   const [OTP, setOTP] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -22,15 +25,27 @@ const ConfirmRidePopUp = (props) => {
     try {
       setLoading(true)
       
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
-        params: {
+      // Debug logs
+      // console.log('🔍 Debug Info:');
+      // console.log('Base URL:', import.meta.env.VITE_BASE_URL);
+      // console.log('Full URL:', `${import.meta.env.VITE_BASE_URL}/rides/start-ride`);
+      // console.log('Ride ID:', props.ride._id);
+      // console.log('OTP:', OTP);
+      // console.log('Token:', localStorage.getItem('token') ? 'Present' : 'Missing');
+      
+      // Try alternative axios configuration
+      const response = await axios({
+        method: 'POST',
+        url: `${import.meta.env.VITE_BASE_URL}/rides/start-ride`,
+        data: {
           rideId: props.ride._id,
           otp: OTP
         },
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
-      })
+      });
 
       console.log('✅ Ride started successfully:', response.data)
       
@@ -38,14 +53,18 @@ const ConfirmRidePopUp = (props) => {
       props.setConfirmRidePopupPanel(false)
       props.setRidePopupPanel(false)
       
-      // You might want to navigate to a different page or update state here
-      // For example: navigate('/ride-in-progress') or update ride status
+      // Navigate to the captain riding page
+      navigate('/captain-riding')
       
     } catch (error) {
-      console.error('❌ Error starting ride:', error)
+      console.error('❌ Full Error Object:', error)
+      console.error('❌ Error Response:', error.response)
+      console.error('❌ Error Config:', error.config)
       
       if (error.response?.data?.message) {
         alert(error.response.data.message)
+      } else if (error.response?.status === 404) {
+        alert('Route not found. Please check if the backend server is running and routes are configured correctly.')
       } else {
         alert('Failed to start ride. Please try again.')
       }
@@ -105,6 +124,13 @@ const ConfirmRidePopUp = (props) => {
               maxLength="6"
               disabled={loading}
             />
+            
+            {/* Debug info display */}
+            <div className='mt-2 text-xs text-gray-500'>
+              <p>Base URL: {import.meta.env.VITE_BASE_URL}</p>
+              <p>Ride ID: {props.ride?._id}</p>
+            </div>
+            
             <button
               type="submit"
               disabled={loading || !OTP}

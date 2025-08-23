@@ -125,12 +125,19 @@ module.exports.startRide = async ({rideId, otp, captain}) => {
     status: 'started'
   });
 
+  const updatedRide = await rideModel.findOne({
+    _id: rideId
+  }).populate('userId').populate('captain');
+
+  console.log('✅ Ride started successfully:', JSON.stringify(updatedRide, null, 2));
+
+  // Send message to user with the UPDATED ride data
   sendMessageToSocketId(ride.userId.socketId, {
     event: "ride-started",
-    data: ride
+    data: updatedRide  // ✅ Send updated ride with captain data
   });
 
-  return ride;
+  return updatedRide;  // ✅ Return updated ride
 }
 
 
