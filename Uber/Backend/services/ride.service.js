@@ -140,5 +140,44 @@ module.exports.startRide = async ({rideId, otp, captain}) => {
   return updatedRide;  // ✅ Return updated ride
 }
 
+module.exports.endRide = async (rideId, captain) => {
+  if (!rideId) {
+    throw new Error("Ride id is required");
+  } 
+
+  const ride = await rideModel.findOne({
+    _id: rideId,
+    captain: captain._id
+  }).populate('userId').populate('captain').select('+otp');
+
+  if (!ride) {
+    throw new Error("Ride not found");
+  }
+
+  if(ride.status !== 'started') {
+    throw new Error("Ride not started");
+  }
+
+  await rideModel.findOneAndUpdate({
+    _id: rideId
+  }, {
+    status: 'completed'
+  });
+  return ride;
+
+  // const updatedRide = await rideModel.findOne({
+  //   _id: rideId
+  // }).populate('userId').populate('captain');
+
+  // console.log('✅ Ride ended successfully:', JSON.stringify(updatedRide, null, 2));
+
+  // // Send message to user with the UPDATED ride data
+  // sendMessageToSocketId(ride.userId.socketId, {
+  //   event: "ride-ended",
+  //   data: updatedRide  // ✅ Send updated ride with captain data
+  // });
+
+  // return updatedRide;  // ✅ Return updated ride
+}
 
 module.exports.getFare = getFare;

@@ -1,10 +1,18 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useEffect, useContext } from 'react'
+import { SocketContext } from '../context/SocketContext'
+import { useNavigate } from 'react-router-dom'
 
 const Riding = (props) => {
     const location = useLocation()
     const { ride } = location.state || {} // Retrieve ride data
+    const { socket } = useContext(SocketContext)
+    const navigate = useNavigate()
+
+    socket.on("ride-completed",()=>{
+        navigate('/home')
+    })
 
     // Debug logs to see what data we have
     useEffect(() => {

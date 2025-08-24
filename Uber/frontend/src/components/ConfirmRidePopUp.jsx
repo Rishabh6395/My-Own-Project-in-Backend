@@ -7,6 +7,8 @@ const ConfirmRidePopUp = (props) => {
   const [OTP, setOTP] = useState('')
   const [loading, setLoading] = useState(false)
 
+  
+
   const navigate = useNavigate()
 
   const submitHandler = async (e) => {
@@ -54,7 +56,7 @@ const ConfirmRidePopUp = (props) => {
       props.setRidePopupPanel(false)
       
       // Navigate to the captain riding page
-      navigate('/captain-riding')
+      navigate('/captain-riding', { state: { ride: props.ride } })
       
     } catch (error) {
       console.error('❌ Full Error Object:', error)
