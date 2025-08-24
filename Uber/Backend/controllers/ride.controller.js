@@ -235,21 +235,60 @@ module.exports.startRide = async (req, res) => {
     }
 }
 
+// Fixed endRide controller in ride.controller.js
+
 module.exports.endRide = async (req, res) => {
+    // Add comprehensive debugging
+    console.log('🔍 EndRide Debug Info:');
+    console.log('req.body:', req.body);
+    console.log('req.captain exists:', !!req.captain);
+    console.log('req.captain:', req.captain);
+    console.log('req.headers.authorization:', req.headers.authorization);
+    console.log('req.cookies:', req.cookies);
+    console.log('Environment JWT_SECRET exists:', !!process.env.JWT_SECRET);
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log('❌ Validation errors:', errors.array());
         return res.status(400).json({ errors: errors.array() });
     }
-    const { rideId } = req.body;
-    try {
-        const ride =  await rideService.endRide({rideId, captain: req.captain});
 
-        sendMessageToSocketId(ride.userId.socketId, {
-            event: "ride-completed",
-            data: ride
-        });
+    const { rideId } = req.body;
+
+    // Check if captain exists
+    if (!req.captain) {
+        console.log('❌ Captain not found in request');
+        return res.status(401).json({ message: "Captain authentication required" });
+    }
+
+    if (!req.captain._id) {
+        console.log('❌ Captain ID not found');
+        return res.status(401).json({ message: "Invalid captain data" });
+    }
+
+    console.log('✅ Captain authenticated:', {
+        id: req.captain._id,
+        name: req.captain.fullname?.firstname
+    });
+
+    try {
+        const ride = await rideService.endRide({rideId, captain: req.captain});
+
+        console.log('✅ Ride ended successfully');
+
+        // Send socket message
+        if (ride.userId && ride.userId.socketId) {
+            sendMessageToSocketId(ride.userId.socketId, {
+                event: "ride-completed",
+                data: ride
+            });
+        } else {
+            console.log('⚠️ User socket ID not found for ride completion notification');
+        }
+
         res.status(200).json(ride);
     } catch (error) {
+        console.error('❌ Error ending ride:', error);
         res.status(400).json({ message: error.message });
     }
 }

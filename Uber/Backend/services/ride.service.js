@@ -163,21 +163,16 @@ module.exports.endRide = async (rideId, captain) => {
   }, {
     status: 'completed'
   });
-  return ride;
+  // return ride;
 
-  // const updatedRide = await rideModel.findOne({
-  //   _id: rideId
-  // }).populate('userId').populate('captain');
+  // Return the updated ride with completed status
+  const updatedRide = await rideModel.findOne({
+    _id: rideId
+  }).populate('userId').populate('captain');
 
-  // console.log('✅ Ride ended successfully:', JSON.stringify(updatedRide, null, 2));
+  console.log('✅ Ride ended successfully:', JSON.stringify(updatedRide, null, 2));
 
-  // // Send message to user with the UPDATED ride data
-  // sendMessageToSocketId(ride.userId.socketId, {
-  //   event: "ride-ended",
-  //   data: updatedRide  // ✅ Send updated ride with captain data
-  // });
-
-  // return updatedRide;  // ✅ Return updated ride
+  return updatedRide;
 }
 
 module.exports.getFare = getFare;
