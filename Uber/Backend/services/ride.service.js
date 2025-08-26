@@ -140,7 +140,7 @@ module.exports.startRide = async ({rideId, otp, captain}) => {
   return updatedRide;  // ✅ Return updated ride
 }
 
-module.exports.endRide = async (rideId, captain) => {
+module.exports.endRide = async ({rideId, captain}) => {
   if (!rideId) {
     throw new Error("Ride id is required");
   } 
