@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useEffect, useContext } from 'react'
 import { SocketContext } from '../context/SocketContext'
 import { useNavigate } from 'react-router-dom'
+import LiveTracking from '../components/LiveTracking'
 
 const Riding = (props) => {
     const location = useLocation()
@@ -34,24 +35,21 @@ const Riding = (props) => {
     }, [ride, location.state]);
 
     return (
-        <div className='h-screen'>
-            <Link to='/home' className='fixed right-2 top-2 h-10 w-10 bg-white flex items-center justify-center rounded-full'>
+        <div className='h-screen relative'>
+            {/* Home button - fixed on top */}
+            <Link to='/home' className='fixed right-2 top-2 h-10 w-10 bg-white flex items-center justify-center rounded-full z-20 shadow-lg'>
                 <i className="text-lg font-medium ri-home-5-line"></i>
             </Link>
-            <div className='h-1/2'>
-                {/* <LiveTracking /> */}
-            </div>
-            <div className='h-1/2 p-4'>
-                {/* Debug Info Display */}
-                {/* <div className='mb-4 p-2 bg-gray-100 rounded text-xs'>
-                    <p><strong>Debug Info:</strong></p>
-                    <p>Has ride data: {ride ? 'Yes' : 'No'}</p>
-                    <p>Has captain data: {ride?.captain ? 'Yes' : 'No'}</p>
-                    <p>Captain ID: {ride?.captain?._id || 'Not found'}</p>
-                    <p>Ride Status: {ride?.status || 'Unknown'}</p>
-                </div> */}
 
-                <div className='flex items-center justify-between'>
+            {/* Full screen LiveTracking as background */}
+            <div className='absolute inset-0 z-0'>
+                <LiveTracking />
+            </div>
+
+            {/* Captain info popup overlay */}
+            <div className='absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-10 p-4 h-auto'>
+                {/* Captain Info */}
+                <div className='flex items-center justify-between mb-4'>
                     <img className='h-12' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
                     <div className='text-right'>
                         <h2 className='text-lg font-medium capitalize'>
@@ -65,9 +63,9 @@ const Riding = (props) => {
                         </p>
                     </div>
                 </div>
-
+                {/* Ride Details */}
                 <div className='flex gap-2 justify-between flex-col items-center'>
-                    <div className='w-full mt-5'>
+                    <div className='w-full'>
                         <div className='flex items-center gap-5 p-3 border-b-2'>
                             <i className="text-lg ri-map-pin-2-fill"></i>
                             <div>
@@ -84,7 +82,10 @@ const Riding = (props) => {
                         </div>
                     </div>
                 </div>
-                <button className='w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg'>Make a Payment</button>
+                {/* Payment Button */}
+                <button className='w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg'>
+                    Make a Payment
+                </button>
             </div>
         </div>
     )
