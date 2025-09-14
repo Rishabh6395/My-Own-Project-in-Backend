@@ -1,6 +1,6 @@
 const express = require('express');
 const foodCountroller = require('../controllers/food.controller');
-const aurthMiddleware = require('../middlewares/auth.middleware');  
+const authMiddleware = require('../middlewares/auth.middleware');  
 const router = express.Router();
 const multer = require('multer');
 
@@ -10,8 +10,12 @@ const upload = multer({
 
 // add protected route
 router.post('/',
-    aurthMiddleware.authFoodPartnerMiddleware, 
+    authMiddleware.authFoodPartnerMiddleware, 
     upload.single('Video'), 
     foodCountroller.createFood);
+
+// GET /api/food 
+router.get('/', authMiddleware.authUserMiddleware, 
+    foodCountroller.getAllFoods);
 
 module.exports = router;
