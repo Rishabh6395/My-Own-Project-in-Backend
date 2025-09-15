@@ -1,0 +1,29 @@
+:root {
+  --color-bg: #f9f9f9;
+  --color-text: #222;
+  --color-primary: #ff4d4f;
+  --color-border: #e0e0e0;
+  --color-input-bg: #fff;
+  --color-input-border: #ccc;
+  --color-btn-bg: var(--color-primary);
+  --color-btn-text: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #181818;
+    --color-text: #f9f9f9;
+    --color-primary: #ff7875;
+    --color-border: #333;
+    --color-input-bg: #222;
+    --color-input-border: #444;
+    --color-btn-bg: var(--color-primary);
+    --color-btn-text: #fff;
+  }
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background 0.2s, color 0.2s;
+}
