@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/form.css';
 
 const UserRegister = () => (
@@ -19,6 +20,9 @@ const UserRegister = () => (
       </div>
       <button type="submit">Register</button>
     </form>
+    <Link className="form-link" to="/food-partner/signup">
+      Register as Food Partner
+    </Link>
   </div>
 );
 

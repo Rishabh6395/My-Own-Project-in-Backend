@@ -35,6 +35,9 @@ async function registerUser(req, res) {
       _id: user._id,
       fullname: user.fullname,
       email: user.email,
+      phone: user.phone,
+      address: user.address,
+      contactName: user.contactName 
     },
   });
 }
@@ -76,7 +79,7 @@ async function logoutUser(req, res){
 }
 
 async function registerFoodPartner(req, res) {
-  const { name, email, password } = req.body;
+  const { name, email, password, phone,address, contactName } = req.body;
 
   const isUserAlreadyExists = await foodPartnerSchmaModel.findOne({ email });
 
@@ -90,6 +93,9 @@ async function registerFoodPartner(req, res) {
     name,
     email,
     password: hashedPassword,
+    phone,
+    address,
+    contactName
   });
 
   const token = jwt.sign(
