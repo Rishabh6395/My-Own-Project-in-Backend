@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/form.css';
+import { Link } from "react-router-dom";
 
 const FoodPartnerLogin = () => (
   <div className="form-container">
@@ -15,6 +16,16 @@ const FoodPartnerLogin = () => (
       </div>
       <button type="submit">Login</button>
     </form>
+    <div className="flex flex-column">
+      <div className="login-option">
+        <p className="text-center">
+          Create an Account{" "}
+          <Link className="form-link" to="/food-partner/login">
+            Register as Food Partner
+          </Link>
+        </p>
+      </div>
+    </div>
   </div>
 );
 

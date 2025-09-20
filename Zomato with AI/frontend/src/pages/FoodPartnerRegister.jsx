@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/form.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import "../styles/form.css";
 
 const FoodPartnerRegister = () => (
   <div className="form-container">
@@ -79,6 +79,16 @@ const FoodPartnerRegister = () => (
     <Link className="form-link" to="/user/register">
       Register as Normal User
     </Link>
+    <div className="flex flex-column">
+      <div className="login-option">
+        <p className="text-center">
+          Already Signup?{" "}
+          <Link className="form-link" to="/food-partner/login">
+            Login
+          </Link>
+        </p>
+      </div>
+    </div>
   </div>
 );
 

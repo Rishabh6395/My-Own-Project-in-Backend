@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import UserRegister from '../components/UserRegister';
-import UserLogin from '../components/UserLogin';
-import FoodPartnerRegister from '../components/FoodPartnerRegister';
-import FoodPartnerLogin from '../components/FoodPartnerLogin';
+import UserRegister from '../pages/UserRegister';
+import UserLogin from '../pages/UserLogin';
+import FoodPartnerRegister from '../pages/FoodPartnerRegister';
+import FoodPartnerLogin from '../pages/FoodPartnerLogin';
 
 const AppRoutes = () => {
   return (
