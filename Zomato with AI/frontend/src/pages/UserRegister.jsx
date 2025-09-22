@@ -2,8 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/form.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const UserRegister = () => {
+
+  const navigate = useNavigate();
+
   const handleSubmit = async(e) => {
     e.preventDefault();
 
@@ -11,19 +15,23 @@ const UserRegister = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    await (axios.post("http://localhost:3000/api/auth/user/register", { fullname, email, password },
+    const response = await (axios.post("http://localhost:3000/api/auth/user/register", { fullname, email, password },
     {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true
     })
     .then(res => console.log(res.data))
     .catch(err => console.error(err))
     )
-
+    
     console.log("Full Name:", fullname);
     console.log("Email:", email);
     console.log("Password:", password);
+
+    navigate("/");
+    console.log(response.data);
 
     // Example API call (adjust URL and data structure as needed)
     // axios.post("/api/register", { fullname, email, password })

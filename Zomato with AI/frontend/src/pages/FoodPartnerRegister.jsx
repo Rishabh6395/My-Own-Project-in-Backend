@@ -1,11 +1,39 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/form.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const FoodPartnerRegister = () => (
+const FoodPartnerRegister = () => {
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+
+    const restaurantName = e.target.restaurantName.value;
+    const contactName = e.target.contactName.value;
+    const phone = e.target.phone.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const address = e.target.address.value;
+
+    await (axios.post("http://localhost:3000/api/auth/foodpartner/register", { name: restaurantName, contactName, phone, email, password, address },
+    {
+      withCredentials: true
+    })
+    .then(res => console.log(res.data)
+
+  )
+    .catch(err => console.error(err))
+    )
+    navigate("/create-food");
+  }
+
+  return(
   <div className="form-container">
     <h2>Food Partner Register</h2>
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="restaurantName">Restaurant Name:</label>
         <input
@@ -91,5 +119,6 @@ const FoodPartnerRegister = () => (
     </div>
   </div>
 );
+}
 
 export default FoodPartnerRegister;
